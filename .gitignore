@@ -1,0 +1,11 @@
+.build/
+.swiftpm/
+.venv/
+.DS_Store
+dist/
+research/apk/
+research/p3-ir-camera/
+research/thermal-camera-viewer/
+research/thermalmaster/
+*.raw
+/live-capture.png

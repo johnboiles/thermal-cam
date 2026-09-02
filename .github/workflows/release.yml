@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install USB dependency
+        run: brew install libusb
+
+      - name: Import Developer ID certificate
+        uses: apple-actions/import-codesign-certs@v7
+        with:
+          p12-file-base64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          p12-password: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+
+      - name: Build, sign, and notarize
+        env:
+          APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+          APPSTORE_CONNECT_API_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+          APPSTORE_CONNECT_API_PRIVATE_KEY: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          key_path="$RUNNER_TEMP/AuthKey_${APPSTORE_CONNECT_API_KEY_ID}.p8"
+          trap 'rm -f -- "$key_path"' EXIT
+          printf '%s' "$APPSTORE_CONNECT_API_PRIVATE_KEY" > "$key_path"
+
+          BUILD_NUMBER="$GITHUB_RUN_NUMBER" \
+          NOTARY_KEY_PATH="$key_path" \
+          NOTARY_KEY_ID="$APPSTORE_CONNECT_API_KEY_ID" \
+          NOTARY_ISSUER_ID="$APPSTORE_CONNECT_API_ISSUER_ID" \
+            ./scripts/release.sh "$version"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          archive="$(find dist -maxdepth 1 -type f -name "Thermal-Cam-${version}-macOS-*.zip" -print -quit)"
+          test -n "$archive"
+          gh release create "$GITHUB_REF_NAME" \
+            "$archive" \
+            "$archive.sha256" \
+            --verify-tag \
+            --generate-notes \
+            --title "Thermal Cam $version"
