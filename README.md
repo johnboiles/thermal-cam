@@ -6,7 +6,7 @@ An open-source, native macOS viewer for USB thermal cameras. Thermal Cam is
 brand-neutral by design: camera-specific USB transports and frame decoders plug
 into a shared radiometric frame model and SwiftUI viewer.
 
-![Thermal Cam icon](Resources/ThermalCamIconFullBleed.png)
+![Thermal Cam showing a live radiometric thermal stream](docs/images/thermal-cam-live.png)
 
 ## Supported cameras
 
