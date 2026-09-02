@@ -16,6 +16,15 @@ into a shared radiometric frame model and SwiftUI viewer.
 
 The P1 is the first supported camera, not the identity of the application.
 
+## Install
+
+```sh
+brew install --cask johnboiles/tap/thermal-cam
+```
+
+You can also download the signed and notarized app from
+[GitHub Releases](https://github.com/johnboiles/thermal-cam/releases/latest).
+
 ## Build the app
 
 Requirements:
