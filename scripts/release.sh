@@ -20,7 +20,7 @@ BUILD_NUMBER="$BUILD_NUMBER" \
 CODE_SIGN_IDENTITY="$SIGNING_IDENTITY" \
     "$PROJECT_DIR/scripts/build-app.sh"
 
-SIGNING_AUTHORITY="$(codesign -dv --verbose=4 "$APP_DIR" 2>&1 | awk -F= '/^Authority=Developer ID Application:/ { print $2; exit }')"
+SIGNING_AUTHORITY="$(codesign -dv --verbose=4 "$APP_DIR" 2>&1 | awk -F= '/^Authority=Developer ID Application:/ { print $2 }')"
 if [[ -z "$SIGNING_AUTHORITY" ]]; then
     echo "The release app is not signed with a Developer ID Application certificate." >&2
     exit 1

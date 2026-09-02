@@ -37,9 +37,9 @@ Store notarization credentials in the login keychain once:
 
 ```sh
 xcrun notarytool store-credentials "thermal-cam-notary" \
-  --apple-id "YOUR_APPLE_ID" \
-  --team-id "YOUR_TEAM_ID" \
-  --password "YOUR_APP_SPECIFIC_PASSWORD"
+  --key "/path/to/AuthKey_YOUR_KEY_ID.p8" \
+  --key-id "YOUR_KEY_ID" \
+  --issuer "YOUR_ISSUER_ID"
 ```
 
 Then run:

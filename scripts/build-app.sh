@@ -79,7 +79,7 @@ fi
 cp "$ICON_OUTPUT/AppIcon.icns" "$CONTENTS_DIR/Resources/AppIcon.icns"
 cp "$ICON_OUTPUT/Assets.car" "$CONTENTS_DIR/Resources/Assets.car"
 
-LINKED_LIBUSB="$(otool -L "$CONTENTS_DIR/MacOS/ThermalCam" | awk '/libusb-1\.0.*dylib/ { print $1; exit }')"
+LINKED_LIBUSB="$(otool -L "$CONTENTS_DIR/MacOS/ThermalCam" | awk '/libusb-1\.0.*dylib/ { print $1 }')"
 if [[ -z "$LINKED_LIBUSB" || ! -f "$LINKED_LIBUSB" ]]; then
     echo "Could not find the libusb library linked by the app." >&2
     exit 1
